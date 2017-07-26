@@ -18,6 +18,8 @@
 #include <vector>
 #include "slot.h"
 
+#include <functional>
+
 namespace SCL {
 
 	template <class t_return, class... args>
@@ -44,7 +46,7 @@ namespace SCL {
 		}
 
 	private:
-		std::vector<slot<t_return, args...>> _slots;
+		std::vector<std::function<t_return(args...)>> _slots;
 
 	};//SCL::signal
 }//SCL

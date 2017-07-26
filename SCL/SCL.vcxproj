@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="SCL.h" />
     <ClInclude Include="signal.h" />
     <ClInclude Include="slot.h" />
   </ItemGroup>

@@ -15,6 +15,8 @@
 #ifndef SCL_SLOT_H
 #define SCL_SLOT_H
 
+#include <functional>
+
 namespace SCL {
 
 	template<class t_return, class... args>
@@ -34,6 +36,10 @@ namespace SCL {
 			this->_slot = function;
 		}
 
+		slot(std::function<t_return(args...)> function) {
+			this->_slot = function;
+		}
+
 		void set_slot(function_ptr function) {
 			this->_slot = function;
 		}
@@ -42,11 +48,7 @@ namespace SCL {
 			*this = other;
 		}
 
-		function_ptr slot_method() {
-			return this->_slot;
-		}
-
-		operator function_ptr() {
+		operator std::function<t_return(args...)>() {
 			return this->_slot;
 		}
 
@@ -63,7 +65,8 @@ namespace SCL {
 		}
 
 	private:
-		t_return(*_slot)(args...);
+		std::function<t_return(args...)> _slot;
+
 	};//slot
 }//namespace SCL
 #endif // !SCL_SLOT_H
