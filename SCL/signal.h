@@ -41,12 +41,12 @@ namespace SCL {
 		}
 
 		void emit(args... arguments) {
-			for (auto slot : _slots)
-				slot(arguments...);
+			for (slot<t_return, args...> _slot : _slots)
+				_slot.execute(arguments...);
 		}
 
 	private:
-		std::vector<std::function<t_return(args...)>> _slots;
+		std::vector<slot<t_return, args...>> _slots;
 
 	};//SCL::signal
 }//SCL

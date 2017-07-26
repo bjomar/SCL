@@ -48,8 +48,8 @@ namespace SCL {
 			*this = other;
 		}
 
-		operator std::function<t_return(args...)>() {
-			return this->_slot;
+		void execute(args... arguments) {
+			this->_slot(arguments...);
 		}
 
 		operator reference() {
