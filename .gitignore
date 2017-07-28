@@ -303,5 +303,6 @@ $RECYCLE.BIN/
 *.lnk
 
 #other things
-*.snl
-*.vcx*
+*.sln
+*.vcxproj
+*.filters
