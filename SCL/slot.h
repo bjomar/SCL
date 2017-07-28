@@ -25,22 +25,23 @@ namespace SCL {
 	public: //usings and stuff
 		using reference = slot&;
 		using const_reference = const slot&;
-		using function_ptr = t_return(*)(args...);
+		using raw_function_ptr = t_return(*)(args...);
+		using function = std::function<t_return(args...)>;
 
 	public:
 		slot() {
 			this->_slot = 0;
 		}
 
-		slot(function_ptr function) {
+		slot(raw_function_ptr function) {
 			this->_slot = function;
 		}
 
-		slot(std::function<t_return(args...)> function) {
+		slot(function function) {
 			this->_slot = function;
 		}
 
-		void set_slot(function_ptr function) {
+		void set_slot(raw_function_ptr function) {
 			this->_slot = function;
 		}
 
@@ -48,8 +49,10 @@ namespace SCL {
 			*this = other;
 		}
 
-		void execute(args... arguments) {
-			this->_slot(arguments...);
+		//executes saved function
+		t_return operator()(args... arguments) {
+			if(this->is_set())
+				this->_slot(arguments...);
 		}
 
 		operator reference() {
@@ -65,7 +68,7 @@ namespace SCL {
 		}
 
 	private:
-		std::function<t_return(args...)> _slot;
+		function _slot;
 
 	};//slot
 }//namespace SCL

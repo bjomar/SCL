@@ -41,8 +41,8 @@ namespace SCL {
 		}
 
 		void emit(args... arguments) {
-			for (slot<t_return, args...> _slot : _slots)
-				_slot.execute(arguments...);
+			for (auto _slot : _slots)
+				_slot(arguments...);
 		}
 
 	private:
