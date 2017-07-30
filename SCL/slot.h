@@ -52,7 +52,7 @@ namespace SCL {
 		//executes saved function
 		t_return operator()(args... arguments) {
 			if(this->is_set())
-				this->_slot(arguments...);
+				return this->_slot(arguments...);
 		}
 
 		operator reference() {
