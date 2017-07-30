@@ -306,3 +306,4 @@ $RECYCLE.BIN/
 *.sln
 *.vcxproj
 *.filters
+SCL/testing.cpp
