@@ -40,6 +40,10 @@ namespace SCL {
 			_slots.push_back(_slot);
 		}
 
+		virtual void disconnect() {
+			this->_slots.clear();
+		}
+
 		void emit(args... arguments) {
 			for (auto _slot : _slots)
 				_slot(arguments...);
