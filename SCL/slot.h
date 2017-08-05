@@ -31,27 +31,27 @@ namespace SCL {
 	public:
 		slot() {
 			this->_slot = 0;
+			this->_name = 0;
 		}
 
-		slot(raw_function_ptr function) {
+		slot(raw_function_ptr function, char* name) {
 			this->_slot = function;
+			_name = name;
 		}
 
-		slot(function function) {
+		slot(function function, char* name) {
 			this->_slot = function;
+			_name = name;
 		}
 
-		void set_slot(raw_function_ptr function) {
+		void set_slot(raw_function_ptr function, char* name) {
 			this->_slot = function;
-		}
-
-		void set_slot(reference other) {
-			*this = other;
+			_name = name;
 		}
 
 		//executes saved function
 		t_return operator()(args... arguments) {
-			if(this->is_set())
+			if(*this)
 				return this->_slot(arguments...);
 		}
 
@@ -63,12 +63,21 @@ namespace SCL {
 			return const_cast<slot>(this);
 		}
 
+		operator bool() {
+			return this->is_set();
+		}
+
 		bool is_set() {
-			return (_slot != 0);
+			return ((_slot != 0) && (_name != 0));
+		}
+
+		const char* name() const {
+			return _name;
 		}
 
 	private:
 		function _slot;
+		char* _name;
 
 	};//slot
 }//namespace SCL

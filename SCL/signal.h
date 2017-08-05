@@ -40,10 +40,27 @@ namespace SCL {
 			_slots.push_back(_slot);
 		}
 
-		virtual void disconnect() {
-			this->_slots.clear();
+		// disconenct first function whos name is function_name
+		bool disconnect(const char* function_name) {
+			for (size_t i = 0; i < _slots.size(); i++)
+				if (_slots.at(i).name() == function_name)
+				{
+					_slots.erase(_slots.begin() + i);
+
+					return true;
+				}
+			return false;
 		}
 
+		bool disconnect() {
+			this->_slots.clear();
+
+			return _slots.empty();
+		}
+
+		//emits signal and runs slots
+		// TODO:
+		//	maybe add possability to store retun values in container
 		void emit(args... arguments) {
 			for (auto _slot : _slots)
 				_slot(arguments...);
