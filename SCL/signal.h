@@ -23,24 +23,24 @@
 namespace SCL {
 
 	template <class t_return, class... args>
-	class signal
+	class basic_signal
 	{
 	public:
-		using reference = signal&;
-		using const_reference = const signal&;
+		using reference = basic_signal&;
+		using const_reference = const basic_signal&;
 		using function_ptr = t_return(*)(args...);
 
 	public:
-
-		void connect(slot<t_return, args...> _slot) {
+		void connect(basic_slot<t_return, args...> _slot) {
 			_slots.push_back(_slot);
 		}
 
-		void connect(function_ptr _slot) {
-			_slots.push_back(_slot);
+		void connect(function_ptr _slot, char* fun_name) {
+			_slots.push_back(basic_slot<t_return, args...>(_slot, fun_name));
 		}
 
-		// disconenct first function whos name is function_name
+		// disconenct first function whos name equals function_name
+		// returns true on success
 		bool disconnect(const char* function_name) {
 			for (size_t i = 0; i < _slots.size(); i++)
 				if (_slots.at(i).name() == function_name)
@@ -59,15 +59,18 @@ namespace SCL {
 		}
 
 		//emits signal and runs slots
-		// TODO:
-		//	maybe add possability to store retun values in container
-		void emit(args... arguments) {
-			for (auto _slot : _slots)
-				_slot(arguments...);
+		//
+		void emit(args... arguments, std::vector<t_return>* return_container) {
+			if (!return_container)
+				for (auto _slot : _slots)
+					_slot(arguments...);
+			else
+				for (auto _slot : _slots)
+					return_container->push_back(_slot(arguments...));
 		}
 
 	private:
-		std::vector<slot<t_return, args...>> _slots;
+		std::vector<basic_slot<t_return, args...>> _slots;
 
 	};//SCL::signal
 }//SCL

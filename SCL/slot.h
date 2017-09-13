@@ -20,26 +20,26 @@
 namespace SCL {
 
 	template<class t_return, class... args>
-	class slot
+	class basic_slot
 	{
 	public: //usings and stuff
-		using reference = slot&;
-		using const_reference = const slot&;
+		using reference = basic_slot&;
+		using const_reference = const basic_slot&;
 		using raw_function_ptr = t_return(*)(args...);
 		using function = std::function<t_return(args...)>;
 
 	public:
-		slot() {
+		basic_slot() {
 			this->_slot = 0;
 			this->_name = 0;
 		}
 
-		slot(raw_function_ptr function, char* name) {
+		basic_slot(raw_function_ptr function, char* name) {
 			this->_slot = function;
 			_name = name;
 		}
 
-		slot(function function, char* name) {
+		basic_slot(function function, char* name) {
 			this->_slot = function;
 			_name = name;
 		}
