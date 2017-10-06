@@ -15,8 +15,6 @@
 #ifndef SCL_H
 #define SCL_H
 
-#define SCL_FUNCTION()
-
 #define SCL_STRINGYFY(x) #x
 #define SCL_FUN(_function) &_function, SCL_STRINGYFY(_function)
 

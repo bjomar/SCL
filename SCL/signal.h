@@ -58,13 +58,13 @@ namespace SCL {
 			return _slots.empty();
 		}
 
+		void emit(args... arguments) {
+			for (auto _slot : _slots)
+				_slot(arguments...);
+		}
+
 		//emits signal and runs slots
-		//
 		void emit(args... arguments, std::vector<t_return>* return_container) {
-			if (!return_container)
-				for (auto _slot : _slots)
-					_slot(arguments...);
-			else
 				for (auto _slot : _slots)
 					return_container->push_back(_slot(arguments...));
 		}
