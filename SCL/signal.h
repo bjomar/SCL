@@ -18,19 +18,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include <vector>
 #include "slot.h"
 
+#include <mutex>
 #include <functional>
 
 namespace SCL {
 
 	template <class t_return, class... args>
-	class basic_signal
-	{
+	class basic_signal {
+
 	public:
 		using reference = basic_signal&;
 		using const_reference = const basic_signal&;
 		using function_ptr = t_return(*)(args...);
 
 	public:
+
 		void connect(basic_slot<t_return, args...> _slot) {
 			_slots.push_back(_slot);
 		}
@@ -43,8 +45,7 @@ namespace SCL {
 		// returns true on success
 		bool disconnect(const char* function_name) {
 			for (size_t i = 0; i < _slots.size(); i++)
-				if (_slots.at(i).name() == function_name)
-				{
+				if (_slots.at(i).name() == function_name) {
 					_slots.erase(_slots.begin() + i);
 
 					return true;
@@ -59,18 +60,24 @@ namespace SCL {
 		}
 
 		void emit(args... arguments) {
+			lock_while_emitting.lock();
 			for (auto _slot : _slots)
 				_slot(arguments...);
+			lock_while_emitting.unlock();
 		}
 
 		//emits signal and runs slots
 		void emit(args... arguments, std::vector<t_return>* return_container) {
+			lock_while_emitting.lock();
 				for (auto _slot : _slots)
 					return_container->push_back(_slot(arguments...));
+			lock_while_emitting.unlock();
 		}
 
 	private:
 		std::vector<basic_slot<t_return, args...>> _slots;
+
+		std::mutex lock_while_emitting;
 
 	};//SCL::signal
 }//SCL

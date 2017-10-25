@@ -20,8 +20,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 namespace SCL {
 
 	template<class t_return, class... args>
-	class basic_slot
-	{
+	class basic_slot {
+
 	public: //usings and stuff
 		using reference = basic_slot&;
 		using const_reference = const basic_slot&;
@@ -51,8 +51,9 @@ namespace SCL {
 
 		//executes saved function
 		t_return operator()(args... arguments) {
-			if(*this)
+			if(*this) {
 				return this->_slot(arguments...);
+			}
 		}
 
 		operator reference() {
