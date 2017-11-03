@@ -1,5 +1,5 @@
 /*
-Copyright(c) 2017 github.com / bjomar
+Copyright(c) 2017 Björn Marx
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files(the "Software"),
 to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
 and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions :
@@ -20,6 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
 #include <mutex>
 #include <functional>
+#include <omp.h>
 
 namespace SCL {
 
@@ -61,16 +62,22 @@ namespace SCL {
 
 		void emit(args... arguments) {
 			lock_while_emitting.lock();
-			for (auto _slot : _slots)
-				_slot(arguments...);
+
+#pragma omp parallel for
+			for(int i = 0; i < _slots.size(); i++)
+				_slots[i](arguments...);
+
 			lock_while_emitting.unlock();
 		}
 
 		//emits signal and runs slots
 		void emit(args... arguments, std::vector<t_return>* return_container) {
 			lock_while_emitting.lock();
-				for (auto _slot : _slots)
-					return_container->push_back(_slot(arguments...));
+
+#pragma omp parallel for
+				for (int i = 0; i < _slots.size(); i++)
+					return_container->push_back(_slots[i](arguments...));
+
 			lock_while_emitting.unlock();
 		}
 
